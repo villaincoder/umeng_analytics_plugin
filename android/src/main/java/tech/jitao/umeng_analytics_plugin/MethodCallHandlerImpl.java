@@ -21,6 +21,9 @@ public class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     @Override
     public void onMethodCall(MethodCall call, MethodChannel.Result result) {
         switch (call.method) {
+            case "preInit":
+                preInit(call, result);
+                break;
             case "init":
                 init(call, result);
                 break;
@@ -36,6 +39,44 @@ public class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
             default:
                 result.notImplemented();
         }
+    }
+
+    private void preInit(MethodCall call, MethodChannel.Result result) {
+        Boolean logEnabled = call.argument("logEnabled");
+        if (logEnabled == null) {
+            logEnabled = false;
+        }
+        UMConfigure.setLogEnabled(logEnabled);
+
+        Boolean encryptEnabled = call.argument("encryptEnabled");
+        if (encryptEnabled == null) {
+            encryptEnabled = false;
+        }
+        UMConfigure.setEncryptEnabled(encryptEnabled);
+
+        final String androidKey = call.argument("androidKey");
+        final String channel = call.argument("channel");
+        UMConfigure.preInit(context, androidKey, channel);
+
+        Integer sessionContinueMillis = call.argument("sessionContinueMillis");
+        if (sessionContinueMillis == null) {
+            sessionContinueMillis = 30000;
+        }
+        MobclickAgent.setSessionContinueMillis(sessionContinueMillis);
+
+        Boolean catchUncaughtExceptions = call.argument("catchUncaughtExceptions");
+        if (catchUncaughtExceptions == null) {
+            catchUncaughtExceptions = true;
+        }
+        MobclickAgent.setCatchUncaughtExceptions(catchUncaughtExceptions);
+
+        if ("MANUAL".equals(call.argument("pageCollectionMode"))) {
+            MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.MANUAL);
+        } else {
+            MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
+        }
+
+        result.success(true);
     }
 
     private void init(MethodCall call, MethodChannel.Result result) {

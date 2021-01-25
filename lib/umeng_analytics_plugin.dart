@@ -8,6 +8,30 @@ class UmengAnalyticsPlugin {
   /// Method channel
   static const MethodChannel _channel = MethodChannel('jitao.tech/umeng_analytics_plugin');
 
+  static Future<bool> preInit({
+    @required String androidKey,
+    @required String iosKey,
+    String channel,
+    bool logEnabled = false,
+    bool encryptEnabled = false,
+    int sessionContinueMillis = 30000,
+    bool catchUncaughtExceptions = true,
+    String pageCollectionMode = 'AUTO',
+  }) async {
+    Map<String, dynamic> map = {
+      'androidKey': androidKey,
+      'iosKey': iosKey,
+      'channel': channel,
+      'logEnabled': logEnabled,
+      'encryptEnabled': encryptEnabled,
+      'sessionContinueMillis': sessionContinueMillis,
+      'catchUncaughtExceptions': catchUncaughtExceptions,
+      'pageCollectionMode': pageCollectionMode,
+    };
+
+    return _channel.invokeMethod<bool>('preInit', map);
+  }
+
   /// Initialize plugin with configurations.
   ///
   /// [androidKey] is for android app key.
