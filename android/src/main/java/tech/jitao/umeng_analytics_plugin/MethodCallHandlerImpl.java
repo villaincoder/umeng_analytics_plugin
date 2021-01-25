@@ -1,6 +1,7 @@
 package tech.jitao.umeng_analytics_plugin;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
@@ -95,7 +96,11 @@ public class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
         final String eventId = call.argument("eventId");
         final String label = call.argument("label");
 
-        MobclickAgent.onEvent(context, eventId, label);
+        if (TextUtils.isEmpty(label)) {
+            MobclickAgent.onEvent(context, eventId);
+        } else {
+            MobclickAgent.onEvent(context, eventId, label);
+        }
 
         result.success(true);
     }
