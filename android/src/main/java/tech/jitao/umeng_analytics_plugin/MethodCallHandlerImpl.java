@@ -140,7 +140,7 @@ public class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
         final String label = call.argument("label");
         final Map<String, String> params = call.argument("params");
 
-        if (params!=null && !params.isEmpty()) {
+        if (params != null && !params.isEmpty()) {
             MobclickAgent.onEvent(context, eventId, params);
         } else if (TextUtils.isEmpty(label)) {
             MobclickAgent.onEvent(context, eventId);
