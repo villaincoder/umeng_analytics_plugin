@@ -90,6 +90,8 @@ class UmengAnalyticsPlugin {
     String label,
     Map<String, String> params,
   }) async {
+    assert(label == null || params == null);
+
     Map<String, dynamic> map = {
       'eventId': eventId,
       'label': label,
