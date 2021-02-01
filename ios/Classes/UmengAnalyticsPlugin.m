@@ -11,7 +11,10 @@
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    if ([@"init" isEqualToString:call.method]) {
+    if ([@"preInit" isEqualToString:call.method]) {
+        // TODO
+        [self init:call result:result];
+    } else if ([@"init" isEqualToString:call.method]) {
         [self init:call result:result];
     } else if ([@"pageStart" isEqualToString:call.method]) {
         [self pageStart:call result:result];
